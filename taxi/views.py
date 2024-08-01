@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -99,6 +99,21 @@ class CarDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Car
     success_url = reverse_lazy("taxi:car-list")
 
+    def form_valid(self, form):
+        messages.success(self.request, "Driver deleted successfully.")
+        return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            return redirect(request.POST.get(
+                "previous_page",
+                reverse_lazy("taxi:car-list"))
+            )
+        return super().post(request, *args, **kwargs)
+
 
 class DriverListView(LoginRequiredMixin, generic.ListView):
     model = Driver
@@ -119,6 +134,21 @@ class DriverCreateView(LoginRequiredMixin, generic.CreateView):
 class DriverDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Driver
     success_url = reverse_lazy("taxi:driver-list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Driver deleted successfully.")
+        return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            return redirect(request.POST.get(
+                "previous_page",
+                reverse_lazy("taxi:driver-list"))
+            )
+        return super().post(request, *args, **kwargs)
 
 
 class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
