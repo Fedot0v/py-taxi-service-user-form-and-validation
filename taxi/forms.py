@@ -30,7 +30,7 @@ class BaseDriverLicenseForm(forms.ModelForm):
         return license_number
 
 
-class DriverUpdateLicenseForm(BaseDriverLicenseForm):
+class DriverLicenseUpdateForm(BaseDriverLicenseForm):
     class Meta(BaseDriverLicenseForm.Meta):
         fields = ["license_number"]
 
